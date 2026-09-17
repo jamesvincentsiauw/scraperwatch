@@ -55,6 +55,7 @@ import json
 
 VOLATILE = {"scraped_at"}
 
+
 def content_hash(item: dict) -> bytes:
     stable = {k: v for k, v in item.items() if k not in VOLATILE}
     encoded = json.dumps(stable, sort_keys=True, default=str).encode()
@@ -64,11 +65,13 @@ def content_hash(item: dict) -> bytes:
 ## The run
 
 ```python
-with scraperwatch.run("shop-products", required=["title", "price"], key=["platform", "product_id"]) as run:
+with scraperwatch.run(
+    "shop-products", required=["title", "price"], key=["platform", "product_id"]
+) as run:
     for url in urls:
         items = parse(fetch(url))
         run.record(url, items, status=200)
-        stage(db, run.run_id, items)          # INSERT INTO products_staging ...
+        stage(db, run.run_id, items)  # INSERT INTO products_staging ...
 
 if run.verdict.quarantined:
     raise scraperwatch.Quarantined(run.verdict)

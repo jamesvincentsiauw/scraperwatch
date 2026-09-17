@@ -25,7 +25,7 @@ with scraperwatch.run("shop-prices", required=["title", "price"], key=["product_
         run.record(url, parse(resp.text), status=resp.status_code)
 
 if run.verdict.quarantined:
-    raise scraperwatch.Quarantined(run.verdict)   # your scheduler marks the task failed
+    raise scraperwatch.Quarantined(run.verdict)  # your scheduler marks the task failed
 publish()
 ```
 
