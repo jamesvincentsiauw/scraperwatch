@@ -56,6 +56,20 @@ class PageTypeStats:
         return self.keyed_items - self.distinct.distinct()
 
 
+@dataclass(frozen=True)
+class SampleIndex:
+    """Sample URLs per page type, handed to the checks for evidence."""
+
+    empty_pages: dict[str, tuple[str, ...]]
+    errors: dict[str, tuple[str, ...]]
+    duplicates: dict[str, tuple[str, ...]]
+    empty_fields: dict[tuple[str, str], tuple[str, ...]]
+
+    @classmethod
+    def empty(cls) -> SampleIndex:
+        return cls({}, {}, {}, {})
+
+
 @dataclass
 class DomainStats:
     pages: int = 0
@@ -141,6 +155,21 @@ class RunStats:
             stats.keyed_items += 1
             if stats.distinct.add(key_hash(values)):
                 stats.duplicate_samples.add(url)
+
+    def samples(self) -> SampleIndex:
+        with self._lock:
+            return SampleIndex(
+                empty_pages={
+                    n: tuple(s.empty_page_samples.urls) for n, s in self.page_types.items()
+                },
+                errors={n: tuple(s.error_samples.urls) for n, s in self.page_types.items()},
+                duplicates={n: tuple(s.duplicate_samples.urls) for n, s in self.page_types.items()},
+                empty_fields={
+                    (n, f): tuple(c.empty_samples.urls)
+                    for n, s in self.page_types.items()
+                    for f, c in s.fields.items()
+                },
+            )
 
     @property
     def total_items(self) -> int:

@@ -51,6 +51,16 @@ class PageTypeSummary:
             return 0.0
         return f.types.get(family, 0) / f.non_empty
 
+    def duplicate_share(self) -> float:
+        if not self.keyed_items:
+            return 0.0
+        return self.duplicate_items / self.keyed_items
+
+    @property
+    def duplicate_items(self) -> int:
+        distinct = self.unique_items - (self.items - self.keyed_items)
+        return self.keyed_items - distinct
+
     def to_dict(self) -> dict[str, Any]:
         return {
             "pages": self.pages,

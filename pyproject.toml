@@ -40,6 +40,8 @@ target-version = "py311"
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF"]
+# The formatter handles line length; long finding messages read better unsplit.
+ignore = ["E501"]
 
 [tool.pyright]
 include = ["src", "tests"]
