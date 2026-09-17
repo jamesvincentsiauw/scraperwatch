@@ -148,6 +148,11 @@ class _PageChecker:
     def share_ceiling(self, band: Band) -> float:
         return band.center + max(self.t.k * band.spread, self.t.min_share_change)
 
+    def rose(self, count: int, total: int, band: Band, ceiling: float) -> bool:
+        """A share rose when it is above the ceiling and clearly above its usual level."""
+        significant = wilson_interval(count, total)[0] > band.center + self.t.k * band.spread
+        return count / total > ceiling and significant
+
     def count_is_low(self, value: int, band: Band) -> bool:
         return (
             value < band.center * self.t.volume_drop
@@ -298,7 +303,7 @@ class _PageChecker:
         band = Band.of([h.empty_pages / h.pages if h.pages else 0.0 for h in self.history])
         ceiling = self.share_ceiling(band)
         share = page.empty_pages / page.pages
-        if wilson_interval(page.empty_pages, page.pages)[0] <= ceiling:
+        if not self.rose(page.empty_pages, page.pages, band, ceiling):
             return []
         return [
             Finding(
@@ -320,7 +325,7 @@ class _PageChecker:
         ceiling = self.share_ceiling(band)
         dups = max(0, page.duplicate_items)
         share = dups / page.keyed_items
-        if wilson_interval(dups, page.keyed_items)[0] <= ceiling:
+        if not self.rose(dups, page.keyed_items, band, ceiling):
             return []
         unique = Band.of([h.unique_items for h in self.history])
         shifted = self.count_is_low(page.unique_items, unique)

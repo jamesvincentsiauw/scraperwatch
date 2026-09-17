@@ -9,12 +9,12 @@ from scraperwatch.stats.values import DEFAULT_EMPTY_VALUES
 
 @dataclass(frozen=True)
 class Thresholds:
-    """Defaults are starting values; the simulation in scripts/simulate.py is what tunes them."""
+    """Defaults are starting values; simulation/simulate.py is what tunes them."""
 
     k: float = 4.0
     min_share_change: float = 0.10
     min_baseline_runs: int = 3
-    volume_drop: float = 0.5
+    volume_drop: float = 0.6
     volume_spike: float = 3.0
     collapse_share: float = 0.05
     collapse_baseline: float = 0.5
