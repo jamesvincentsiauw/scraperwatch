@@ -19,6 +19,9 @@ classifiers = [
     "Typing :: Typed",
 ]
 
+[project.scripts]
+scraperwatch = "scraperwatch.cli:main"
+
 [project.urls]
 Repository = "https://github.com/jamesvincentsiauw/scraperwatch"
 
