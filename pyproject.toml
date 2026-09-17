@@ -47,7 +47,7 @@ select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF"]
 ignore = ["E501"]
 
 [tool.pyright]
-include = ["src", "tests"]
+include = ["src", "tests", "simulation"]
 pythonVersion = "3.11"
 typeCheckingMode = "standard"
 strict = ["src"]
