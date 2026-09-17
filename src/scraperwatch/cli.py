@@ -111,7 +111,7 @@ def _runs(store: SQLiteStore, target: str | None, limit: int, out: TextIO) -> in
         print("No runs recorded yet.", file=out)
         return 0
     print(
-        f"{'RUN':<24} {'TARGET':<20} {'FINISHED (UTC)':<17} {'STATUS':<11} {'PAGES':>6} {'ITEMS':>8}",
+        f"{'RUN':<24} {'TARGET':<20} {'FINISHED (UTC)':<16} {'STATUS':<11} {'PAGES':>6} {'ITEMS':>8}",
         file=out,
     )
     for r in records:
