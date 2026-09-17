@@ -263,3 +263,16 @@ def test_quarantine_findings_come_first() -> None:
     run, samples = build(Shape(pages=8, extra_field="badge"))
     severities = [f.severity for f in evaluate(run, history(), SETTINGS, samples).findings]
     assert severities == sorted(severities, key=lambda s: s is not Severity.QUARANTINE)
+
+
+def test_empty_pages_in_a_small_run_are_caught() -> None:
+    # 6 of 30 pages empty against a baseline that never had any: the case scenario 2 used to miss.
+    run, samples = build(Shape(pages=30, empty_pages=6))
+    base = [build(Shape(seed=i, pages=30))[0] for i in range(10)]
+    assert "empty_pages" in checks(evaluate(run, base, SETTINGS, samples).findings)
+
+
+def test_one_empty_page_is_not_an_incident() -> None:
+    run, samples = build(Shape(pages=30, empty_pages=1))
+    base = [build(Shape(seed=i, pages=30))[0] for i in range(10)]
+    assert evaluate(run, base, SETTINGS, samples).findings == ()
