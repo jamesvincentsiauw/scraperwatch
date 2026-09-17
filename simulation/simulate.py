@@ -198,7 +198,7 @@ def render(rows: list[tuple[Scenario, Tally]], seeds: int) -> str:
         "Scenario 6 is detected as a warning, by design: unique items fall by about a quarter, "
         "which is under the volume threshold that would make it a quarantine.",
         "",
-        "These numbers hold for the fake shop's noise levels: up to 5% of listings replaced and "
+        "These numbers hold for the fake shop's noise levels: up to 5% of listings removed and "
         "5% added per category per day, 1% of prices and 3% of ratings missing. "
         "Real sites can be noisier, so a clean result here does not guarantee zero false alarms elsewhere.",
         "",

@@ -1,0 +1,21 @@
+name: simulation
+
+on:
+  schedule:
+    - cron: "0 3 * * 1"
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+
+jobs:
+  simulate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --locked
+      - run: uv run python -m simulation.simulate --seeds 30 --output evaluation.md
+      - uses: actions/upload-artifact@v4
+        with:
+          name: evaluation
+          path: evaluation.md
