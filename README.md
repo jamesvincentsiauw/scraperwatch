@@ -33,6 +33,22 @@ publish()
 
 The first runs of a target only apply absolute rules while scraperwatch collects a baseline. From the fourth healthy run on, every run is compared with the median of up to 10 previous healthy runs.
 
+## How a run is judged
+
+```mermaid
+flowchart LR
+    S[Your scraper] -->|"record() per page"| RS[RunStats<br/>counters in memory]
+    RS -->|run summary on exit| E[evaluate<br/>absolute rules,<br/>median and MAD bands]
+    DB[(SQLite store)] -->|"baseline: last 10 passing<br/>or accepted runs"| E
+    E --> V{verdict}
+    V -->|"pass, warn or quarantine"| D[your code:<br/>publish, flag or<br/>raise Quarantined]
+    V -->|"warn or quarantine"| B[evidence bundle<br/>JSON, HTML report]
+    V -->|counts and findings| DB
+    CLI[scraperwatch CLI] -->|"runs, show, report, accept"| DB
+```
+
+scraperwatch runs inside the scraper process. The baseline is read once when the run starts and the results are written once when it ends, so `record()` never touches the store while pages are being fetched.
+
 ## What gets checked
 
 | Check | Fires when | Severity |
