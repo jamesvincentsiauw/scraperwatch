@@ -99,6 +99,24 @@ scraperwatch baseline <target>             # what the next run is compared with
 scraperwatch prune --older-than 90d
 ```
 
+## Ask an agent about your runs (MCP)
+
+`scraperwatch-mcp` serves the store to an MCP client over stdio, so you can ask "why was shop-prices quarantined yesterday?" and the agent reads the findings and the baseline instead of guessing. It is read-only: it cannot accept a run or change the baseline. It needs the `mcp` extra, which keeps the core library dependency-free.
+
+```bash
+pip install 'scraperwatch[mcp]'
+claude mcp add scraperwatch -- scraperwatch-mcp --store /path/to/scraperwatch.db
+```
+
+| Tool | Answers |
+| --- | --- |
+| `list_runs` | Recent runs, newest first, optionally for one target |
+| `get_run` | A run's status, counts and findings with sample URLs |
+| `compare_run` | Each field's fill rate in a run next to the baseline it was judged against |
+| `get_baseline` | What the next run of a target will be compared with |
+
+Without `--store` it reads the store from `scraperwatch.toml` in the working directory. It exits with an error when the store file does not exist, rather than creating an empty one.
+
 ## Configuration
 
 Arguments passed to `run()` win over `scraperwatch.toml` in the working directory, which wins over the defaults. `SCRAPERWATCH_CONFIG`, `SCRAPERWATCH_STORE` and `SCRAPERWATCH_EVIDENCE_DIR` override the file's location, store and evidence directory.
@@ -140,7 +158,7 @@ Known gaps: no handling of seasonal patterns such as weekend traffic, nested fie
 ## Development
 
 ```bash
-uv sync
+uv sync --extra mcp
 uv run pytest
 uv run ruff check . && uv run pyright
 uv run python -m simulation.simulate --seeds 10
