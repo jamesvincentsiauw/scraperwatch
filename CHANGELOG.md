@@ -7,5 +7,6 @@
 - Absolute rules that apply before a baseline exists: required fields, fetch errors and runs with no items.
 - SQLite store, evidence bundles and a self-contained HTML report.
 - `scraperwatch` command: `runs`, `show`, `report`, `accept`, `baseline`, `prune`.
+- `scraperwatch-mcp`, a read-only MCP server over stdio with `list_runs`, `get_run`, `compare_run` and `get_baseline`. Install with the `mcp` extra.
 - Configuration through `scraperwatch.toml` and `SCRAPERWATCH_*` variables.
 - Fake shop simulation and evaluation report.

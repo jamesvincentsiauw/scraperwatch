@@ -5,7 +5,7 @@ Thanks for looking. Issues with a concrete failure are the most useful contribut
 ## Setup
 
 ```bash
-uv sync
+uv sync --extra mcp
 uv run pytest
 uv run ruff check . && uv run ruff format --check . && uv run pyright
 ```

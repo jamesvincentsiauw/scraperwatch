@@ -21,9 +21,15 @@ classifiers = [
 
 [project.scripts]
 scraperwatch = "scraperwatch.cli:main"
+scraperwatch-mcp = "scraperwatch.mcp_server:main"
 
 [project.urls]
 Repository = "https://github.com/jamesvincentsiauw/scraperwatch"
+
+[project.optional-dependencies]
+mcp = [
+    "mcp>=1.2,<2",
+]
 
 [dependency-groups]
 dev = [

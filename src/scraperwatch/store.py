@@ -76,13 +76,17 @@ class StoredRun:
     findings: tuple[Finding, ...]
 
 
-def open_store(url: str) -> SQLiteStore:
+def store_path(url: str) -> Path:
     """Accepts `sqlite:///relative.db`, `sqlite:////absolute.db` or a plain path."""
     if url.startswith("sqlite:///"):
-        return SQLiteStore(Path(url.removeprefix("sqlite:///")))
+        return Path(url.removeprefix("sqlite:///"))
     if "://" in url:
         raise ValueError(f"unsupported store URL {url!r}; only SQLite is available in this release")
-    return SQLiteStore(Path(url))
+    return Path(url)
+
+
+def open_store(url: str) -> SQLiteStore:
+    return SQLiteStore(store_path(url))
 
 
 class SQLiteStore:
